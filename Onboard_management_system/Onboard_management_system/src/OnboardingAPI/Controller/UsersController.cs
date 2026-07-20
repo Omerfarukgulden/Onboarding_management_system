@@ -22,7 +22,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var user = await _service.GetByIdAsync(id);
-        return user is null ? NotFound() : Ok(user);
+        return user is null ? NotFound(new {message = $"Id'si  {id} olan user bulunamadı ."}) : Ok(user);
     }
 //swagger ekranında yeni user ekleme işlemini yapar
     [HttpPost]
@@ -36,13 +36,13 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto dto)
     {
         var updated = await _service.UpdateAsync(id, dto);
-        return updated ? NoContent() : NotFound();
+        return updated ? NoContent() : NotFound(new {message = $"Id'si  {id} olan user bulunamadı ."});
     }
 //swagger ekranında userları idlerine göre siler 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _service.DeleteAsync(id);
-        return deleted ? NoContent() : NotFound();
+        return deleted ? NoContent() : NotFound(new {message = $"Id'si  {id} olan user bulunamadı ."});
     }
 }

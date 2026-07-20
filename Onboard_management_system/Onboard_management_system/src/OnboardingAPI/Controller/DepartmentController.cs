@@ -36,13 +36,13 @@ public class DepartmentsController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateDepartmentDto dto)
     {
         var updated = await _departmentService.UpdateAsync(id, dto);
-        return updated ? NoContent() : NotFound();
+        return updated ? NoContent() : NotFound(new {message = $"Id'si  {id} olan department bulunamadı ."});
     }
 // swagger ekranı idye department işlerinde göre silme işlemi 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _departmentService.DeleteAsync(id);
-        return deleted ? NoContent() : NotFound();
+        return deleted ? NoContent() : NotFound(new {message = $"Id'si  {id} olan department bulunamadı ."});
     }
 }

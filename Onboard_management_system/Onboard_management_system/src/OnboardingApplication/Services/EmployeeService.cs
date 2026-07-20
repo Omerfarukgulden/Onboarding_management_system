@@ -4,6 +4,7 @@ using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingDomain.Entities;
 using Onboard_management_system.OnboardingInfrastructure.Context;
+using Onboard_management_system.OnboardingApplication.Services.exceptions;
 
 namespace Onboard_management_system.OnboardingApplication.Services;
 

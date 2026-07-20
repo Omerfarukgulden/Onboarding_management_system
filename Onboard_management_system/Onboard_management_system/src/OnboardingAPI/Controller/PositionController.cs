@@ -36,13 +36,13 @@ public class PositionsController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdatePositionDto dto)
     {
         var updated = await _positionService.UpdateAsync(id, dto);
-        return updated ? NoContent() : NotFound();
+        return updated ? NoContent() : NotFound(new {message = $"Id'si  {id} olan position bulunamadı ."});
     }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _positionService.DeleteAsync(id);
-        return deleted ? NoContent() : NotFound();
+        return deleted ? NoContent() : NotFound(new {message = $"Id'si  {id} olan position bulunamadı ."});
     }
 }

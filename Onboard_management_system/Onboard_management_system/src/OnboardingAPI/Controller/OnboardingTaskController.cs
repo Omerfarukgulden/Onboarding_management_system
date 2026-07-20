@@ -47,6 +47,6 @@ public class OnboardingTasksController : ControllerBase
     public async Task<IActionResult> UpdateNote(int id, [FromBody] UpdateOnboardingTaskNoteDto dto)
     {
         var updated = await _service.UpdateNoteAsync(id, dto);
-        return updated ? NoContent() : NotFound();
+        return updated ? NoContent() : NotFound(new {message = $"Id'si  {id} olan task bulunamadı ."});
     }
 }

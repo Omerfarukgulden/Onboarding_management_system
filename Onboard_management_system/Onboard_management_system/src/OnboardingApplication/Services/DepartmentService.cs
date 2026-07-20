@@ -2,8 +2,10 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
+using Onboard_management_system.OnboardingApplication.Services.exceptions;
 using Onboard_management_system.OnboardingDomain.Entities;
 using Onboard_management_system.OnboardingInfrastructure.Context;
+
 
 namespace Onboard_management_system.OnboardingApplication.Services;
 
@@ -24,11 +26,14 @@ public class DepartmentService : IDepartmentService
         var departments = await _context.Departments.ToListAsync();
         return _mapper.Map<IEnumerable<DepartmentDto>>(departments);
     }
-//idye göre getiren method 
-    public async Task<DepartmentDto?> GetByIdAsync(int id)
+//idye göre getiren method id yoksa çökmez hata mesajı fırlatır 
+    public async Task<DepartmentDto> GetByIdAsync(int id)
     {
-        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == id);
-        return department is null ? null : _mapper.Map<DepartmentDto>(department);
+        var department = await _context.Departments
+                             .FirstOrDefaultAsync(d => d.Id == id)
+                         ?? throw new NotFoundException($"ID'si {id} olan departman bulunamadı.");
+
+        return _mapper.Map<DepartmentDto>(department);
     }
 //yeni department üreten method
     public async Task<DepartmentDto> CreateAsync(CreateDepartmentDto dto)
@@ -42,7 +47,10 @@ public class DepartmentService : IDepartmentService
 //departmenı güncelleyen method 
     public async Task<bool> UpdateAsync(int id, UpdateDepartmentDto dto)
     {
-        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == id);
+        var department = await _context.Departments
+            .FirstOrDefaultAsync(d => d.Id == id);
+            //?? throw new NotFoundException($"Id'si  {id} olan department bulunamadı.");
+        
         if (department is null) return false;
 
         _mapper.Map(dto, department);
