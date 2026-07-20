@@ -14,7 +14,7 @@ public class DepartmentsController : ControllerBase
     {
         _departmentService = departmentService;
     }
-
+   //swagger ekranı department işlerinde get işlemi 
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _departmentService.GetAllAsync());
 
@@ -24,21 +24,21 @@ public class DepartmentsController : ControllerBase
         var department = await _departmentService.GetByIdAsync(id);
         return department is null ? NotFound() : Ok(department);
     }
-
+// swagger ekranı department işlerinde post işlemi 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateDepartmentDto dto)
     {
         var created = await _departmentService.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
-
+// swagger ekranı department işlerinde idye göre update işlemi 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateDepartmentDto dto)
     {
         var updated = await _departmentService.UpdateAsync(id, dto);
         return updated ? NoContent() : NotFound();
     }
-
+// swagger ekranı idye department işlerinde göre silme işlemi 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

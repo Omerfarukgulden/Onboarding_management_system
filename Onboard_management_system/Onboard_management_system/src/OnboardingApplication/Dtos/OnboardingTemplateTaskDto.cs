@@ -1,5 +1,6 @@
 namespace Onboard_management_system.OnboardingApplication.Dtos;
 
+//oluşturulmuş şablona oluşturulan görevi için veriler 
 public class OnboardingTemplateTaskDto
 {
     public int Id { get; set; }
@@ -12,6 +13,7 @@ public class OnboardingTemplateTaskDto
     public int DueInDays { get; set; }
 }
 
+//Oşog oluşturmak için gerekli veriler 
 public class CreateOnboardingTemplateTaskDto
 {
     public string Title { get; set; } = string.Empty;

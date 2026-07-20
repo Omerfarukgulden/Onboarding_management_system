@@ -2,6 +2,7 @@ using Onboard_management_system.OnboardingDomain.Enums;
 
 namespace Onboard_management_system.OnboardingApplication.Dtos;
 
+//user için gereken veriler 
 public class UserDto
 {
     public int Id { get; set; }
@@ -14,6 +15,7 @@ public class UserDto
     public DateTime CreatedAt { get; set; }
 }
 
+//user oluşturmak için gerkeen veriler 
 public class CreateUserDto
 {
     public string Username { get; set; } = string.Empty;
@@ -23,6 +25,8 @@ public class CreateUserDto
     public int? DepartmentId { get; set; }
 }
 
+
+// userleri güncellemek için gereken veriler 
 public class UpdateUserDto
 {
     public string Email { get; set; } = string.Empty;

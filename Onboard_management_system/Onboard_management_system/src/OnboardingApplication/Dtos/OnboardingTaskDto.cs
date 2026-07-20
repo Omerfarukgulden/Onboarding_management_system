@@ -2,6 +2,7 @@ using TaskStatus = Onboard_management_system.OnboardingDomain.Enums.TaskStatus;
 
 namespace Onboard_management_system.OnboardingApplication.Dtos;
 
+//Task için gereken veriler
 public class OnboardingTaskDto
 {
     public int Id { get; set; }

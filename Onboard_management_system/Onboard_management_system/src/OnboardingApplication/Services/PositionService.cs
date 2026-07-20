@@ -18,18 +18,22 @@ public class PositionService : IPositionService
         _mapper = mapper;
     }
 
+    // tüm pozisyonları getiren method 
     public async Task<IEnumerable<PositionDto>> GetAllAsync()
     {
         var positions = await _context.Positions.ToListAsync();
         return _mapper.Map<IEnumerable<PositionDto>>(positions);
     }
 
+    //pozisyon idsine göre getiren method 
     public async Task<PositionDto?> GetByIdAsync(int id)
     {
         var position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id);
         return position is null ? null : _mapper.Map<PositionDto>(position);
     }
 
+    
+    // yeni pozisyon üreten method
     public async Task<PositionDto> CreateAsync(CreatePositionDto dto)
     {
         var position = _mapper.Map<Position>(dto);
@@ -38,6 +42,8 @@ public class PositionService : IPositionService
         return _mapper.Map<PositionDto>(position);
     }
 
+    
+    // pozsiyonları güncellemeye yarayan method 
     public async Task<bool> UpdateAsync(int id, UpdatePositionDto dto)
     {
         var position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id);
@@ -48,6 +54,7 @@ public class PositionService : IPositionService
         return true;
     }
 
+    // pozisyonları silmeye yarayan method 
     public async Task<bool> DeleteAsync(int id)
     {
         var position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id);

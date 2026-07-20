@@ -14,17 +14,17 @@ public class PositionsController : ControllerBase
     {
         _positionService = positionService;
     }
-
+//swagger ekranında tüm pozisyonları getirir
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _positionService.GetAllAsync());
-
+//swagger ekranıda idye göre pozisyonları getirir
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var position = await _positionService.GetByIdAsync(id);
         return position is null ? NotFound() : Ok(position);
     }
-
+//swagger ekranındda yeni posizyon ekleme işlemi 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePositionDto dto)
     {

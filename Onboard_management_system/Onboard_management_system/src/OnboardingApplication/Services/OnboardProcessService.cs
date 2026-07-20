@@ -19,6 +19,7 @@ public class OnboardingProcessService : IOnboardingProcessService
         _mapper = mapper;
     }
 
+    //işe alışım sürecini getiren method 
     public async Task<IEnumerable<OnboardingProcessDto>> GetAllAsync()
     {
         var processes = await _context.OnboardingProcesses
@@ -29,6 +30,7 @@ public class OnboardingProcessService : IOnboardingProcessService
         return _mapper.Map<IEnumerable<OnboardingProcessDto>>(processes);
     }
 
+    // işe alışım sürecini idye göre getiren method 
     public async Task<OnboardingProcessDto?> GetByIdAsync(int id)
     {
         var process = await _context.OnboardingProcesses
@@ -39,6 +41,7 @@ public class OnboardingProcessService : IOnboardingProcessService
         return process is null ? null : _mapper.Map<OnboardingProcessDto>(process);
     }
 
+    // taskı başlatan method 
     public async Task<OnboardingProcessDto> StartAsync(StartOnboardingProcessDto dto)
     {
         var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmpId == dto.EmployeeId);
@@ -49,7 +52,7 @@ public class OnboardingProcessService : IOnboardingProcessService
             .Include(t => t.TemplateTasks)
             .FirstOrDefaultAsync(t => t.Id == dto.OnboardingTemplateId && t.IsActive);
 
-        // İş kuralı: onboarding şablonu olmayan bir süreç başlatılamaz
+        // taskın şablonu yoksa task başlatılamaz 
         if (template is null)
             throw new InvalidOperationException("Geçerli bir onboarding şablonu bulunamadı.");
 
@@ -64,7 +67,7 @@ public class OnboardingProcessService : IOnboardingProcessService
         _context.OnboardingProcesses.Add(process);
         await _context.SaveChangesAsync();
 
-        // İş kuralı: süreç başlatıldığında şablondaki görevler otomatik oluşturulmalı
+        
         foreach (var templateTask in template.TemplateTasks)
         {
             var task = new OnboardingTask

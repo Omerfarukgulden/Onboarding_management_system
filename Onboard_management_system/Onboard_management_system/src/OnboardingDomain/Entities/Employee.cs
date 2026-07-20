@@ -2,11 +2,13 @@ namespace Onboard_management_system.OnboardingDomain.Entities;
 
 public class Employee
 {
+    //employee bilgileri 
     public int EmpId { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
+    // çalışma bilgileri 
     public DateTime HireDate { get; set; }
 
     public int DepartmentId { get; set; }
@@ -19,6 +21,8 @@ public class Employee
     public Employee? Manager { get; set; }
 
     public bool IsActive { get; set; } = true;
+    
+    // inheritince kısmı 
 
     public ICollection<OnboardingProcess> OnboardingProcesses { get; set; } = new List<OnboardingProcess>();
 }

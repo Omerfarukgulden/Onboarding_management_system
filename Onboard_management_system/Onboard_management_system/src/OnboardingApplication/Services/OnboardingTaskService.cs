@@ -19,7 +19,7 @@ public class OnboardingTaskService : IOnboardingTaskService
         _context = context;
         _mapper = mapper;
     }
-
+// tüm taskları getiren method 
     public async Task<IEnumerable<OnboardingTaskDto>> GetAllAsync()
     {
         var tasks = await _context.OnboardingTasks
@@ -29,7 +29,7 @@ public class OnboardingTaskService : IOnboardingTaskService
 
         return _mapper.Map<IEnumerable<OnboardingTaskDto>>(tasks);
     }
-
+//taskları çalışan idsine göre getiren method 
     public async Task<OnboardingTaskDto?> GetByIdAsync(int id)
     {
         var task = await _context.OnboardingTasks
@@ -39,13 +39,13 @@ public class OnboardingTaskService : IOnboardingTaskService
 
         return task is null ? null : _mapper.Map<OnboardingTaskDto>(task);
     }
-
+// taskların durumunu idsine göre güncelleyen method 
     public async Task<bool> UpdateStatusAsync(int id, UpdateOnboardingTaskStatusDto dto)
     {
         var task = await _context.OnboardingTasks.FirstOrDefaultAsync(t => t.Id == id);
         if (task is null) return false;
 
-        // İş kuralı: tamamlanan bir görev tekrar bekliyor durumuna alınamaz
+        // eğer bir görev bir kere tamamlandıysa tekrar diğer durumlara geçirilemez 
         if (task.Status == TaskStatus.Completed && dto.NewStatus == TaskStatus.Pending)
             throw new InvalidOperationException("Tamamlanmış bir görev tekrar 'Bekliyor' durumuna alınamaz.");
 
@@ -58,7 +58,7 @@ public class OnboardingTaskService : IOnboardingTaskService
             task.CompletedByUserId = dto.ChangedByUserId;
         }
 
-        // İş kuralı: her durum değişikliği işlem geçmişine kaydedilmeli
+        // iş durumu hakkında güncelleme yapıldıgında anlık zamanı kaydeder
         _context.TaskStatusHistories.Add(new TaskStatusHistory
         {
             OnboardingTaskId = task.Id,
@@ -75,6 +75,7 @@ public class OnboardingTaskService : IOnboardingTaskService
         return true;
     }
 
+    // taska not eklemeye yarayan method 
     public async Task<bool> UpdateNoteAsync(int id, UpdateOnboardingTaskNoteDto dto)
     {
         var task = await _context.OnboardingTasks.FirstOrDefaultAsync(t => t.Id == id);
@@ -85,8 +86,7 @@ public class OnboardingTaskService : IOnboardingTaskService
         return true;
     }
 
-    // İş kuralı: zorunlu görevler tamamlanmadan onboarding süreci tamamlanamaz;
-    // hepsi bitince süreç otomatik "Completed" olur.
+    //zorunlu olarak tamamlanması beklenen görevler bitmeden görevin bittiği varsılayamazı sağlayan method 
     private async Task TryCompleteOnboardingProcessAsync(int onboardingProcessId)
     {
         var mandatoryTasks = await _context.OnboardingTasks
@@ -105,6 +105,8 @@ public class OnboardingTaskService : IOnboardingTaskService
         process.EndDate = DateTime.UtcNow;
         await _context.SaveChangesAsync();
     }
+    
+    //taskda yapılan değişiklerin tarihe göre açıklamasını yapan method 
     public async Task<IEnumerable<TaskStatusHistoryDto>> GetHistoryAsync(int taskId)
     {
         var history = await _context.TaskStatusHistories

@@ -4,6 +4,7 @@ namespace Onboard_management_system.OnboardingDomain.Entities;
 
 public class OnboardingTask
 {
+    // onboarding task bilgileri 
     public int Id { get; set; }
 
     public int OnboardingProcessId { get; set; }
@@ -28,5 +29,6 @@ public class OnboardingTask
 
     public string? Note { get; set; }
 
+    // inherite kısmı 
     public ICollection<TaskStatusHistory> StatusHistory { get; set; } = new List<TaskStatusHistory>();
 }

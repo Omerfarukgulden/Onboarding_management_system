@@ -4,6 +4,7 @@ namespace Onboard_management_system.OnboardingApplication.Interfaces;
 
 public interface IUserService
 {
+    //servicede kullanılacak methodları implement ettik 
     Task<IEnumerable<UserDto>> GetAllAsync();
     Task<UserDto?> GetByIdAsync(int id);
     Task<UserDto> CreateAsync(CreateUserDto dto);

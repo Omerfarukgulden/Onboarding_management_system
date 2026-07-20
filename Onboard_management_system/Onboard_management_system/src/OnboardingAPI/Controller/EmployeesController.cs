@@ -14,21 +14,21 @@ public class EmployeesController : ControllerBase
     {
         _employeeService = employeeService;
     }
-
+//swagger ekranı employee işlerinde görüntüleme işlemi 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         var employees = await _employeeService.GetAllAsync();
         return Ok(employees);
     }
-
+//swagger ekranı employee işlerinde employeeleri idlerine göre gçrüntüleme işlemi 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var employee = await _employeeService.GetByIdAsync(id);
         return employee is null ? NotFound() : Ok(employee);
     }
-
+//swagger ekranı yeni employee oluşturma işlemi 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
     {
@@ -46,14 +46,14 @@ public class EmployeesController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
+// swagger ekranı ıd ye göre employeelerin bilgilerini güncelleme işlemi 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeDto dto)
     {
         var updated = await _employeeService.UpdateAsync(id, dto);
         return updated ? NoContent() : NotFound();
     }
-
+// swagger ekranı id ye göre employelleri silme ekranı 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

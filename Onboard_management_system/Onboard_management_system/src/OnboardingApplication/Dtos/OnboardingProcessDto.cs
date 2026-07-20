@@ -2,6 +2,8 @@ using Onboard_management_system.OnboardingDomain.Enums;
 
 namespace Onboard_management_system.OnboardingApplication.Dtos;
 
+
+//OnboardingProcess için tüm veriler 
 public class OnboardingProcessDto
 {
     public int Id { get; set; }
@@ -13,7 +15,7 @@ public class OnboardingProcessDto
     public DateTime? EndDate { get; set; }
     public OnboardingStatus Status { get; set; }
 }
-
+//işe alışöa sürecinin gerektirdiği veriler 
 public class StartOnboardingProcessDto
 {
     public int EmployeeId { get; set; }

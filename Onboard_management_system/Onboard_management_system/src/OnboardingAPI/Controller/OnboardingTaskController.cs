@@ -14,18 +14,21 @@ public class OnboardingTasksController : ControllerBase
     {
         _service = service;
     }
+    
+    //swagger ekranında taskların  geçmişte hangi statu değişiklerinin yapıldıgını getirir
     [HttpGet("{id:int}/history")]
     public async Task<IActionResult> GetHistory(int id) => Ok(await _service.GetHistoryAsync(id));
+   //swagger ekranında tüm taskları getirir
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
-
+//swagger ekranında taskları idlerine göre getirir
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var task = await _service.GetByIdAsync(id);
         return task is null ? NotFound() : Ok(task);
     }
-
+//swagger ekranında taskların durum güncellemelerini yapar yapıldı-yapılmadı-devamediyor şeklinde
     [HttpPut("{id:int}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateOnboardingTaskStatusDto dto)
     {
@@ -39,7 +42,7 @@ public class OnboardingTasksController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
+//swagger ekranında taskların altına note ekleme güncellemesini yapar 
     [HttpPut("{id:int}/note")]
     public async Task<IActionResult> UpdateNote(int id, [FromBody] UpdateOnboardingTaskNoteDto dto)
     {

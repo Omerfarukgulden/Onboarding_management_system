@@ -2,6 +2,8 @@ using TaskStatus = Onboard_management_system.OnboardingDomain.Enums.TaskStatus;
 
 namespace Onboard_management_system.OnboardingApplication.Dtos;
 
+
+//task durumuu tarihi için gerkeen veriler
 public class TaskStatusHistoryDto
 {
     public int Id { get; set; }

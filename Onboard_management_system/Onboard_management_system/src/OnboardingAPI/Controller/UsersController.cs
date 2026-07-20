@@ -14,31 +14,31 @@ public class UsersController : ControllerBase
     {
         _service = service;
     }
-
+//swagger ekranında tüm userları getirir
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
-
+//swagger ekranında idye göre userları getirir
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var user = await _service.GetByIdAsync(id);
         return user is null ? NotFound() : Ok(user);
     }
-
+//swagger ekranında yeni user ekleme işlemini yapar
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateUserDto dto)
     {
         var created = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
-
+//swagger ekranında userların idsine göre güncelleme işlemi yapar
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto dto)
     {
         var updated = await _service.UpdateAsync(id, dto);
         return updated ? NoContent() : NotFound();
     }
-
+//swagger ekranında userları idlerine göre siler 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

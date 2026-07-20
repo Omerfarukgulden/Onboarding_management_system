@@ -17,7 +17,7 @@ public class EmployeeService : IEmployeeService
         _context = context;
         _mapper = mapper;
     }
-
+// tüm çalışanları gösteren method 
     public async Task<IEnumerable<EmployeeDto>> GetAllAsync()
     {
         var employees = await _context.Employees
@@ -27,7 +27,7 @@ public class EmployeeService : IEmployeeService
 
         return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
     }
-
+// idlerine göre çalışan getiren method 
     public async Task<EmployeeDto?> GetByIdAsync(int empId)
     {
         var employee = await _context.Employees
@@ -37,15 +37,15 @@ public class EmployeeService : IEmployeeService
 
         return employee is null ? null : _mapper.Map<EmployeeDto>(employee);
     }
-
+// yeni çalışan oluşturan method
     public async Task<EmployeeDto> CreateAsync(CreateEmployeeDto dto)
     {
         var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == dto.DepartmentId);
 
-        // İş kuralı: pasif bir departman için yeni çalışan oluşturulamaz
+        // eğer department yoksa departman bulunamadı hatası verir
         if (department is null)
             throw new KeyNotFoundException("Departman bulunamadı.");
-
+        // eğer department pasifse çalışan eklenemez hatası verir
         if (!department.IsActive)
             throw new InvalidOperationException("Pasif bir departman için çalışan oluşturulamaz.");
 
@@ -58,7 +58,7 @@ public class EmployeeService : IEmployeeService
         return await GetByIdAsync(employee.EmpId)
                ?? throw new InvalidOperationException("Çalışan oluşturuldu ama tekrar okunamadı.");
     }
-
+    // çalışanları idlerine göre güncelleyen method 
     public async Task<bool> UpdateAsync(int empId, UpdateEmployeeDto dto)
     {
         var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmpId == empId);
@@ -68,7 +68,7 @@ public class EmployeeService : IEmployeeService
         await _context.SaveChangesAsync();
         return true;
     }
-
+//idsi girilen çalışanı siler 
     public async Task<bool> DeleteAsync(int empId)
     {
         var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmpId == empId);

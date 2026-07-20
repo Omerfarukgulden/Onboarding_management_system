@@ -19,19 +19,21 @@ public class UserService : IUserService
         _context = context;
         _mapper = mapper;
     }
-
+    //tüm userları getiren method 
     public async Task<IEnumerable<UserDto>> GetAllAsync()
     {
         var users = await _context.Users.Include(u => u.Department).ToListAsync();
         return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 
+    // userları idlerine göre getiren method 
     public async Task<UserDto?> GetByIdAsync(int id)
     {
         var user = await _context.Users.Include(u => u.Department).FirstOrDefaultAsync(u => u.Id == id);
         return user is null ? null : _mapper.Map<UserDto>(user);
     }
 
+    // yeni user oluşturan method
     public async Task<UserDto> CreateAsync(CreateUserDto dto)
     {
         var user = new User
@@ -50,6 +52,7 @@ public class UserService : IUserService
         return _mapper.Map<UserDto>(user);
     }
 
+    // userları idlerine göre güncelleyen method 
     public async Task<bool> UpdateAsync(int id, UpdateUserDto dto)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -60,7 +63,7 @@ public class UserService : IUserService
         return true;
     }
 
-    // Soft delete
+    // userları idlerine göre silen method 
     public async Task<bool> DeleteAsync(int id)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -71,6 +74,7 @@ public class UserService : IUserService
         return true;
     }
 
+    // databaseda passwordların düz string olarak durmamasını sağlayan method 
     private static string HashPassword(string password)
     {
         var bytes = Encoding.UTF8.GetBytes(password);

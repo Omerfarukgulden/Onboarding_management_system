@@ -4,6 +4,7 @@ namespace Onboard_management_system.OnboardingApplication.Interfaces;
 
 public interface IPositionService
 {
+    //servicede kullanılacak methodları implement ettik 
     Task<IEnumerable<PositionDto>> GetAllAsync();
     Task<PositionDto?> GetByIdAsync(int id);
     Task<PositionDto> CreateAsync(CreatePositionDto dto);

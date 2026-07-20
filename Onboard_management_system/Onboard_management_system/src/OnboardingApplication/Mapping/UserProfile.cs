@@ -10,8 +10,7 @@ public class UserProfile : Profile
     {
         CreateMap<User, UserDto>()
             .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department != null ? src.Department.Name : null));
-
-        // Password ayrı ele alınacak (hash'leme service'te yapılacak), mapping'de yok
+        
         CreateMap<UpdateUserDto, User>();
     }
 }

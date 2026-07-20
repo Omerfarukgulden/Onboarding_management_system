@@ -4,6 +4,7 @@ namespace Onboard_management_system.OnboardingDomain.Entities;
 
 public class OnboardingProcess
 {
+    //onboarding proccess bilgileri 
     public int Id { get; set; }
 
     public int EmployeeId { get; set; }
@@ -16,6 +17,8 @@ public class OnboardingProcess
     public DateTime? EndDate { get; set; }
 
     public OnboardingStatus Status { get; set; }
+    
+    // inheritince kısmı 
 
     public ICollection<OnboardingTask> Tasks { get; set; } = new List<OnboardingTask>();
 }

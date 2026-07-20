@@ -14,17 +14,17 @@ public class OnboardingProcessesController : ControllerBase
     {
         _service = service;
     }
-
+//swagger ekranında tüm işlerin durumunu getiren işlme 
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
-
+//swagger ekranında idye göre işleri getiren işlem 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
         var process = await _service.GetByIdAsync(id);
         return process is null ? NotFound() : Ok(process);
     }
-
+//swagger ekranında yeni başlayan employeenin sürecini getirme işlemi 
     [HttpPost]
     public async Task<IActionResult> Start([FromBody] StartOnboardingProcessDto dto)
     {

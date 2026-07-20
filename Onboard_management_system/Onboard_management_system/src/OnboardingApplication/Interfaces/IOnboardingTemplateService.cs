@@ -4,6 +4,7 @@ namespace Onboard_management_system.OnboardingApplication.Interfaces;
 
 public interface IOnboardingTemplateService
 {
+    //servicede kullanılacak methodları implement ettik 
     Task<IEnumerable<OnboardingTemplateDto>> GetAllAsync();
     Task<OnboardingTemplateDto?> GetByIdAsync(int id);
     Task<OnboardingTemplateDto> CreateAsync(CreateOnboardingTemplateDto dto);

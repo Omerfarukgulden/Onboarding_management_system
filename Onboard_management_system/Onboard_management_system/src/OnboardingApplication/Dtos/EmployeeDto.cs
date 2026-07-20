@@ -1,5 +1,6 @@
 namespace Onboard_management_system.OnboardingApplication.Dtos;
 
+//employee entitysi için tüm veriler 
 public class EmployeeDto
 {
     public int EmpId { get; set; }
@@ -18,6 +19,7 @@ public class EmployeeDto
     public string? PositionName { get; set; }
 }
 
+//employee oluşturmak için gereken veriler
 public class CreateEmployeeDto
 {
     public string EmpName { get; set; } = string.Empty;
@@ -31,7 +33,7 @@ public class CreateEmployeeDto
     public int DepartmentId { get; set; }
     public int PositionId { get; set; }
 }
-
+//employee güncellemek için gereken veriler 
 public class UpdateEmployeeDto : CreateEmployeeDto
 {
     public DateTime? EndDate { get; set; }

@@ -4,6 +4,7 @@ namespace Onboard_management_system.OnboardingApplication.Interfaces;
 
 public interface IOnboardingTaskService
 {
+    //servicede kullanılacak methodları implement ettik 
     Task<IEnumerable<OnboardingTaskDto>> GetAllAsync();
     Task<OnboardingTaskDto?> GetByIdAsync(int id);
     Task<bool> UpdateStatusAsync(int id, UpdateOnboardingTaskStatusDto dto);
