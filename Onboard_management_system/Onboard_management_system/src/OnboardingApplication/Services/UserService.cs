@@ -6,6 +6,7 @@ using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingDomain.Entities;
 using Onboard_management_system.OnboardingInfrastructure.Context;
+using BCrypt.Net;
 
 namespace Onboard_management_system.OnboardingApplication.Services;
 
@@ -22,14 +23,18 @@ public class UserService : IUserService
     //tüm userları getiren method 
     public async Task<IEnumerable<UserDto>> GetAllAsync()
     {
-        var users = await _context.Users.Include(u => u.Department).ToListAsync();
+        var users = await _context.Users
+            .Include(u => u.Department)
+            .ToListAsync();
         return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 
     // userları idlerine göre getiren method 
     public async Task<UserDto?> GetByIdAsync(int id)
     {
-        var user = await _context.Users.Include(u => u.Department).FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _context.Users
+            .Include(u => u.Department)
+            .FirstOrDefaultAsync(u => u.Id == id);
         return user is null ? null : _mapper.Map<UserDto>(user);
     }
 
@@ -42,7 +47,8 @@ public class UserService : IUserService
             Email = dto.Email,
             Role = dto.Role,
             DepartmentId = dto.DepartmentId,
-            PasswordHash = HashPassword(dto.Password),
+            // databasede şifrelerin string olarak durmaması için 
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
             IsActive = true,
             CreatedAt = DateTime.UtcNow
         };
@@ -74,11 +80,5 @@ public class UserService : IUserService
         return true;
     }
 
-    // databaseda passwordların düz string olarak durmamasını sağlayan method 
-    private static string HashPassword(string password)
-    {
-        var bytes = Encoding.UTF8.GetBytes(password);
-        var hash = SHA256.HashData(bytes);
-        return Convert.ToBase64String(hash);
-    }
+    
 }
