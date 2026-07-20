@@ -20,7 +20,7 @@ public class CreateUserDto
 {
     public string Username { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty; // düz metin sadece burada, hemen hash'lenecek
+    public string Password { get; set; } = string.Empty; // düz metin sadece burada hash'lenecek
     public UserRole Role { get; set; }
     public int? DepartmentId { get; set; }
 }
