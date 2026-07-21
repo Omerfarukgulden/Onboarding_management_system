@@ -192,3 +192,4 @@
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/BCrypt-Net-Next.dll
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/Onboard_management_system.sourcelink.json
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
