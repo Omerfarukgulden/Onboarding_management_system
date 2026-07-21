@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingApplication.Services;
 using Onboard_management_system.OnboardingInfrastructure.Context;
@@ -67,19 +68,23 @@ builder.Services.AddSwaggerGen(options =>
     {
         Name = "Authorization",
         Type = Microsoft.OpenApi.SecuritySchemeType.Http,
-        Scheme = "Bearer",
+        Scheme = "bearer",
         BearerFormat = "JWT",
-        Description = "JWT token'ı 'Bearer {token}' formatında girin."
+        Description = "Yalnızca JWT token değerini girin. Bearer yazmayın."
     });
 
-    options.AddSecurityRequirement(doc => new Microsoft.OpenApi.OpenApiSecurityRequirement
+    options.AddSecurityRequirement(document => new Microsoft.OpenApi.OpenApiSecurityRequirement
     {
         {
-            new Microsoft.OpenApi.OpenApiSecuritySchemeReference("Bearer"),
+            new Microsoft.OpenApi.OpenApiSecuritySchemeReference(
+                "Bearer",
+                document
+            ),
             new List<string>()
         }
     });
 });
+
 
 var app = builder.Build();
 

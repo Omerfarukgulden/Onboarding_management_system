@@ -7,7 +7,7 @@ namespace Onboard_management_system.OnboardingAPI.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 
 public class UsersController : ControllerBase
 {
