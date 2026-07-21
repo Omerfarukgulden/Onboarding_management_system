@@ -1,0 +1,170 @@
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+}
+
+/* ---------- Login ---------- */
+.login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-box {
+    background: #fff;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    width: 320px;
+}
+.login-box h1 {
+    font-size: 20px;
+    margin: 0 0 20px;
+    text-align: center;
+}
+.login-box label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+}
+.login-box input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.login-box button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* ---------- General ---------- */
+button {
+    cursor: pointer;
+    background: #2f5bea;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: 13px;
+}
+button:hover { background: #24469c; }
+button.secondary { background: #6b7280; }
+button.secondary:hover { background: #4b5563; }
+button.danger { background: #d9364a; }
+button.danger:hover { background: #a6293a; }
+button.small { padding: 4px 8px; font-size: 12px; }
+
+.error {
+    color: #b00020;
+    font-size: 13px;
+    margin-top: 8px;
+    min-height: 16px;
+}
+.info { color: #2a7a2a; font-size: 13px; margin-top: 8px; }
+
+/* ---------- Layout ---------- */
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    width: 220px;
+    background: #1f2430;
+    color: #fff;
+    padding: 16px 0;
+    flex-shrink: 0;
+}
+.sidebar h2 {
+    font-size: 16px;
+    padding: 0 16px 16px;
+    margin: 0;
+    border-bottom: 1px solid #333a4a;
+}
+.sidebar .user-info {
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #b7bccb;
+    border-bottom: 1px solid #333a4a;
+}
+.sidebar nav a {
+    display: block;
+    color: #d7dae2;
+    text-decoration: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.sidebar nav a:hover, .sidebar nav a.active {
+    background: #2f5bea;
+    color: #fff;
+}
+.sidebar .logout {
+    margin: 16px;
+    width: calc(100% - 32px);
+}
+
+.main {
+    flex: 1;
+    padding: 24px;
+    overflow-x: auto;
+}
+.main h2 { margin-top: 0; }
+
+.card {
+    background: #fff;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+}
+th { background: #fafafa; }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+.form-grid label {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 3px;
+    color: #444;
+}
+.form-grid input, .form-grid select, .form-grid textarea {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.form-actions { margin-top: 12px; }
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    background: #eef1fb;
+    color: #2f5bea;
+}
+.row-actions button { margin-right: 4px; }
+.hidden { display: none !important; }
+.muted { color: #888; font-size: 12px; }

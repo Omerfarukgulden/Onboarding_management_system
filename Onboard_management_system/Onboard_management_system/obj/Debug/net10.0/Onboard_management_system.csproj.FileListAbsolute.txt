@@ -193,3 +193,11 @@
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/BCrypt-Net-Next.dll
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/Onboard_management_system.sourcelink.json
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/Onboard_management_system.staticwebassets.runtime.json
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/887jphw4w4-{0}-abx8ma0pwu-abx8ma0pwu.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/ijqoaqxudt-{0}-8d4dllwjth-8d4dllwjth.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/u5ggawy4qi-{0}-u2yfydbrnp-u2yfydbrnp.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/lceoytwd0s-{0}-2tu5f4ygvt-2tu5f4ygvt.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/1hbidka43v-{0}-jn4cumlbm2-jn4cumlbm2.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/p1t8n3mdkg-{0}-5p41x2kbmp-5p41x2kbmp.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/g603jzbzx2-{0}-mj3xjd5dmx-mj3xjd5dmx.gz
