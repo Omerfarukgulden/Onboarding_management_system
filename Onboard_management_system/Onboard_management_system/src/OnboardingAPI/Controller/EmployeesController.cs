@@ -7,16 +7,12 @@ namespace Onboard_management_system.OnboardingAPI.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles =  "Ik")]
-public class EmployeesController : ControllerBase
+[Authorize(Roles =  "Ik,Admin")]
+public class EmployeesController(IEmployeeService employeeService) : ControllerBase
 {
-    private readonly IEmployeeService _employeeService;
+    private readonly IEmployeeService _employeeService = employeeService;
 
-    public EmployeesController(IEmployeeService employeeService)
-    {
-        _employeeService = employeeService;
-    }
-//swagger ekranı employee işlerinde görüntüleme işlemi 
+    //swagger ekranı employee işlerinde görüntüleme işlemi 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -34,19 +30,8 @@ public class EmployeesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
     {
-        try
-        {
-            var created = await _employeeService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.EmpId }, created);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var created = await _employeeService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = created.EmpId }, created);
     }
 // swagger ekranı ıd ye göre employeelerin bilgilerini güncelleme işlemi 
     [HttpPut("{id:int}")]

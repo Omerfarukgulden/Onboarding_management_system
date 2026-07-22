@@ -30,18 +30,7 @@ public class OnboardingProcessesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Start([FromBody] StartOnboardingProcessDto dto)
     {
-        try
-        {
             var created = await _service.StartAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
     }
 }

@@ -40,7 +40,8 @@ public class OnboardingTaskService : IOnboardingTaskService
         return task is null ? null : _mapper.Map<OnboardingTaskDto>(task);
     }
 // taskların durumunu idsine göre güncelleyen method 
-    public async Task<bool> UpdateStatusAsync(int id, UpdateOnboardingTaskStatusDto dto)
+    public async Task<bool> UpdateStatusAsync(int id, UpdateOnboardingTaskStatusDto dto, int currentUserId, string currentUserRole, int? currentUserDepartmentId)
+        // ↑ GÜNCELLENDİ (parametreler eklendi)
     {
         var task = await _context.OnboardingTasks.FirstOrDefaultAsync(t => t.Id == id);
         if (task is null) return false;
@@ -48,14 +49,24 @@ public class OnboardingTaskService : IOnboardingTaskService
         // eğer bir görev bir kere tamamlandıysa tekrar diğer durumlara geçirilemez 
         if (task.Status == TaskStatus.Completed && dto.NewStatus == TaskStatus.Pending)
             throw new InvalidOperationException("Tamamlanmış bir görev tekrar 'Bekliyor' durumuna alınamaz.");
+        // ↓ GÜNCELLENDİ (bu blok tamamen yeni — yetki kontrolü)
+        if (currentUserRole == "DepartmentUser")
+        {
+            var isAssignedToMe = task.ResponsibleUserId == currentUserId;
+            var isAssignedToMyDepartment = task.ResponsibleDepartmentId is not null
+                                           && task.ResponsibleDepartmentId == currentUserDepartmentId;
 
+            if (!isAssignedToMe && !isAssignedToMyDepartment)
+                throw new UnauthorizedAccessException("Bu görev size veya departmanınıza atanmamış.");
+        }
+        
         var oldStatus = task.Status;
         task.Status = dto.NewStatus;
 
         if (dto.NewStatus == TaskStatus.Completed)
         {
             task.CompletedAt = DateTime.UtcNow;
-            task.CompletedByUserId = dto.ChangedByUserId;
+            task.CompletedByUserId = currentUserId;
         }
 
         // iş durumu hakkında güncelleme yapıldıgında anlık zamanı kaydeder
@@ -64,7 +75,7 @@ public class OnboardingTaskService : IOnboardingTaskService
             OnboardingTaskId = task.Id,
             OldStatus = oldStatus,
             NewStatus = dto.NewStatus,
-            ChangedByUserId = dto.ChangedByUserId,
+            ChangedByUserId = currentUserId,
             ChangedAt = DateTime.UtcNow
         });
 

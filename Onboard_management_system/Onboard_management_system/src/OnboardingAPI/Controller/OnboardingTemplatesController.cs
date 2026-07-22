@@ -51,15 +51,9 @@ public class OnboardingTemplatesController : ControllerBase
     [HttpPost("{id:int}/tasks")]
     public async Task<IActionResult> AddTask(int id, [FromBody] CreateOnboardingTemplateTaskDto dto)
     {
-        try
-        {
+        
             var created = await _service.AddTaskAsync(id, dto);
             return Ok(created);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
     }
 //swagger ekranında task idsine göre görüntüler
     [HttpGet("{id:int}/tasks")]

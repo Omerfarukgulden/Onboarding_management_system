@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Onboard_management_system.OnboardingApplication.Dtos;
@@ -34,15 +35,17 @@ public class OnboardingTasksController : ControllerBase
     [HttpPut("{id:int}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateOnboardingTaskStatusDto dto)
     {
-        try
-        {
-            var updated = await _service.UpdateStatusAsync(id, dto);
+        var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var currentUserRole = User.FindFirstValue(ClaimTypes.Role)!;
+        var currentUserDepartmentId = User.FindFirstValue("departmentId") is string deptStr
+            ? int.Parse(deptStr)
+            : (int?)null;
+
+       
+            // ↓ GÜNCELLENDİ (parametre sayısı arttı: currentUserId, currentUserRole, currentUserDepartmentId eklendi)
+            var updated = await _service.UpdateStatusAsync(id, dto, currentUserId, currentUserRole, currentUserDepartmentId);
             return updated ? NoContent() : NotFound();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+       
     }
 //swagger ekranında taskların altına note ekleme güncellemesini yapar 
     [HttpPut("{id:int}/note")]

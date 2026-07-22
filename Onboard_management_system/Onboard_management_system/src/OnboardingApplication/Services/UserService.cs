@@ -41,6 +41,13 @@ public class UserService : IUserService
     // yeni user oluşturan method
     public async Task<UserDto> CreateAsync(CreateUserDto dto)
     {
+        if (dto.DepartmentId.HasValue)
+        {
+            var departmentExists = await _context.Departments.AnyAsync(d => d.Id == dto.DepartmentId.Value);
+            if (!departmentExists)
+                throw new KeyNotFoundException("Belirtilen departman bulunamadı.");
+        }
+        
         var user = new User
         {
             Username = dto.Username,
@@ -52,7 +59,12 @@ public class UserService : IUserService
             IsActive = true,
             CreatedAt = DateTime.UtcNow
         };
-
+        if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
+        {
+            throw new InvalidOperationException($"Bu username ({dto.Username}) zaten mevcut.");
+            // veya daha iyi: return Result.Fail("Username already exists");
+        }
+        
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
         return _mapper.Map<UserDto>(user);

@@ -21,7 +21,7 @@ public class AuthController : ControllerBase
         _tokenService = tokenService;
     }
 
-    [HttpPost("Login")]
+    [HttpPost]//("Login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username && u.IsActive);
