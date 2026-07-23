@@ -14,11 +14,9 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
 
     //swagger ekranı employee işlerinde görüntüleme işlemi 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var employees = await _employeeService.GetAllAsync();
-        return Ok(employees);
-    }
+    public async Task<IActionResult> GetAll([FromQuery] 
+        EmployeeFilterDto filter)
+        => Ok(await _employeeService.GetAllAsync(filter));
 //swagger ekranı employee işlerinde employeeleri idlerine göre gçrüntüleme işlemi 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)

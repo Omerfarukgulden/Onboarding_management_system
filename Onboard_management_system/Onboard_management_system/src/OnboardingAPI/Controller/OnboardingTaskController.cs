@@ -22,8 +22,8 @@ public class OnboardingTasksController : ControllerBase
     [HttpGet("{id:int}/history")]
     public async Task<IActionResult> GetHistory(int id) => Ok(await _service.GetHistoryAsync(id));
    //swagger ekranında tüm taskları getirir
-    [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+   [HttpGet]
+   public async Task<IActionResult> GetAll([FromQuery] OnboardingTaskFilterDto filter) => Ok(await _service.GetAllAsync(filter));
 //swagger ekranında taskları idlerine göre getirir
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
@@ -54,4 +54,6 @@ public class OnboardingTasksController : ControllerBase
         var updated = await _service.UpdateNoteAsync(id, dto);
         return updated ? NoContent() : NotFound(new {message = $"Id'si  {id} olan task bulunamadı ."});
     }
+    [HttpGet("overdue")]
+    public async Task<IActionResult> GetOverdue() => Ok(await _service.GetOverdueAsync());
 }

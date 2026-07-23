@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Onboard_management_system.OnboardingApplication.Common;
 using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingDomain.Entities;
@@ -20,14 +21,40 @@ public class OnboardingTaskService : IOnboardingTaskService
         _mapper = mapper;
     }
 // tüm taskları getiren method 
-    public async Task<IEnumerable<OnboardingTaskDto>> GetAllAsync()
+    public async Task<PagedResult<OnboardingTaskDto>> GetAllAsync(OnboardingTaskFilterDto filter)
     {
-        var tasks = await _context.OnboardingTasks
+        var query = _context.OnboardingTasks
             .Include(t => t.ResponsibleDepartment)
             .Include(t => t.ResponsibleUser)
+            .AsQueryable();
+
+        if (filter.Status.HasValue)
+            query = query.Where(t => t.Status == filter.Status.Value);
+
+        if (filter.ResponsibleDepartmentId.HasValue)
+            query = query.Where(t => t.ResponsibleDepartmentId == filter.ResponsibleDepartmentId.Value);
+
+        if (filter.ResponsibleUserId.HasValue)
+            query = query.Where(t => t.ResponsibleUserId == filter.ResponsibleUserId.Value);
+
+        if (filter.IsMandatory.HasValue)
+            query = query.Where(t => t.IsMandatory == filter.IsMandatory.Value);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(t => t.DueDate)
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<OnboardingTaskDto>>(tasks);
+        return new PagedResult<OnboardingTaskDto>
+        {
+            Items = _mapper.Map<List<OnboardingTaskDto>>(items),
+            TotalCount = totalCount,
+            PageNumber = filter.PageNumber,
+            PageSize = filter.PageSize
+        };
     }
 //taskları çalışan idsine göre getiren method 
     public async Task<OnboardingTaskDto?> GetByIdAsync(int id)
@@ -127,5 +154,20 @@ public class OnboardingTaskService : IOnboardingTaskService
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<TaskStatusHistoryDto>>(history);
+    }
+    public async Task<IEnumerable<OnboardingTaskDto>> GetOverdueAsync()
+    {
+        var now = DateTime.UtcNow;
+
+        var overdueTasks = await _context.OnboardingTasks
+            .Include(t => t.ResponsibleDepartment)
+            .Include(t => t.ResponsibleUser)
+            .Where(t => t.DueDate < now
+                        && t.Status != TaskStatus.Completed
+                        && t.Status != TaskStatus.Cancelled)
+            .OrderBy(t => t.DueDate)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<OnboardingTaskDto>>(overdueTasks);
     }
 }

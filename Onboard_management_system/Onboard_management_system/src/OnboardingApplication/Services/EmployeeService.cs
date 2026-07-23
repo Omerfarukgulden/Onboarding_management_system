@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Onboard_management_system.OnboardingApplication.Common;
 using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingDomain.Entities;
@@ -19,15 +20,49 @@ public class EmployeeService : IEmployeeService
         _mapper = mapper;
     }
 // tüm çalışanları gösteren method 
-    public async Task<IEnumerable<EmployeeDto>> GetAllAsync()
+    public async Task<PagedResult<EmployeeDto>> GetAllAsync(EmployeeFilterDto filter)
     {
-        var employees = await _context.Employees
+        var query = _context.Employees
             .Include(e => e.Department)
             .Include(e => e.Position)
+            .AsQueryable();
+
+        if (filter.DepartmentId.HasValue)
+            query = query.Where(e => e.DepartmentId == filter.DepartmentId.Value);
+
+        if (filter.PositionId.HasValue)
+            query = query.Where(e => e.PositionId == filter.PositionId.Value);
+
+        if (filter.IsActive.HasValue)
+            query = query.Where(e => e.IsActive == filter.IsActive.Value);
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var search = filter.Search.Trim().ToLower();
+            query = query.Where(e =>
+                e.FirstName.ToLower().Contains(search) ||
+                e.LastName.ToLower().Contains(search) ||
+                e.Email.ToLower().Contains(search));
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(e => e.LastName)
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        return new PagedResult<EmployeeDto>
+        {
+            Items = _mapper.Map<List<EmployeeDto>>(items),
+            TotalCount = totalCount,
+            PageNumber = filter.PageNumber,
+            PageSize = filter.PageSize
+        };
+
     }
+
 // idlerine göre çalışan getiren method 
     public async Task<EmployeeDto?> GetByIdAsync(int empId)
     {

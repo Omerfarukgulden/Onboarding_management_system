@@ -1,6 +1,5 @@
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/appsettings.Development.json
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/appsettings.json
-/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/src/OnboardingAPI/appsettings.json
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/Onboard_management_system.staticwebassets.runtime.json
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/Onboard_management_system.staticwebassets.endpoints.json
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/Onboard_management_system
@@ -201,4 +200,7 @@
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/Onboard_management_system.genruntimeconfig.cache
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/ref/Onboard_management_system.dll
 /Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/0dgdca2w38-{0}-sb6flmvu7v-sb6flmvu7v.gz
-/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/0yy7gtb1ts-{0}-gnztqs5b0f-gnztqs5b0f.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/obj/Debug/net10.0/compressed/0yy7gtb1ts-{0}-ldgytxz4p9-ldgytxz4p9.gz
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/FluentValidation.dll
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/FluentValidation.AspNetCore.dll
+/Users/omer/Desktop/Onboard/Onboard_management_system/Onboard_management_system/bin/Debug/net10.0/FluentValidation.DependencyInjectionExtensions.dll

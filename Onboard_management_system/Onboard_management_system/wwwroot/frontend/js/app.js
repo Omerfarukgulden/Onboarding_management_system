@@ -8,7 +8,7 @@ const SECTIONS_BY_ROLE = {
     { key: "departments", label: "Departmanlar" },
     { key: "positions", label: "Pozisyonlar" },
     { key: "users", label: "Kullanıcılar" },
-    { key: "employees", label: "Çalışanlar" },
+
   ],
   Ik: [
     { key: "employees", label: "Çalışanlar" },
@@ -473,10 +473,13 @@ async function renderEmployees() {
   await loadEmployees();
 }
 
+let empFilters = { pageNumber: 1, pageSize: 10 };
+
 async function loadEmployees() {
   try {
-    const list = await apiRequest("/Employees");
-    document.getElementById("empTableBody").innerHTML = list.map((emp) => `
+    const params = new URLSearchParams({ pageNumber: empFilters.pageNumber, pageSize: empFilters.pageSize });
+    const result = await apiRequest(`/Employees?${params.toString()}`);
+    document.getElementById("empTableBody").innerHTML = result.items.map((emp) => `
       <tr>
         <td>${emp.empId}</td>
         <td>${esc(emp.empName)} ${esc(emp.empSurname)}</td>
@@ -490,9 +493,31 @@ async function loadEmployees() {
           <button class="small danger" onclick="deleteEmp(${emp.empId})">Sil</button>
         </td>
       </tr>`).join("");
+    renderEmpPagination(result);
   } catch (e) { showError(e.message); }
 }
 
+function renderEmpPagination(result) {
+  let box = document.getElementById("empPagination");
+  if (!box) {
+    // ilk çağrıda tablo altına ekle
+    const table = document.querySelector("#empTableBody").closest("table");
+    box = document.createElement("div");
+    box.id = "empPagination";
+    box.className = "form-actions";
+    table.parentElement.appendChild(box);
+  }
+  box.innerHTML = `
+    <span class="muted">Sayfa ${result.pageNumber} / ${result.totalPages} (Toplam ${result.totalCount})</span>
+    <button class="small" ${result.pageNumber <= 1 ? "disabled" : ""} onclick="changeEmpPage(-1)">Önceki</button>
+    <button class="small" ${result.pageNumber >= result.totalPages ? "disabled" : ""} onclick="changeEmpPage(1)">Sonraki</button>
+  `;
+}
+
+function changeEmpPage(delta) {
+  empFilters.pageNumber += delta;
+  loadEmployees();
+}
 function toDateInput(v) {
   if (!v) return "";
   return new Date(v).toISOString().slice(0, 10);
@@ -771,10 +796,32 @@ async function startProcess(e) {
 }
 
 // ================= GÖREVLER (Ik, DepartmentUser) =================
+let taskFilters = { status: "", responsibleDepartmentId: "", pageNumber: 1, pageSize: 10 };
+
 async function renderTasks() {
   setContent(`
     <h2>Görevler</h2>
     <div class="error" id="actionMsg"></div>
+    <div class="card">
+      <div class="form-grid">
+        <div>
+          <label>Durum</label>
+          <select id="taskFilterStatus">
+            <option value="">Tümü</option>
+            ${TASK_STATUS_OPTIONS.map((s) => `<option value="${s}">${TASK_STATUS_LABELS[s]}</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label>Departman Id</label>
+          <input id="taskFilterDept" type="number" />
+        </div>
+        <div class="form-actions">
+          <button type="button" id="taskFilterApply">Filtrele</button>
+          <button type="button" class="secondary" id="taskFilterClear">Temizle</button>
+          <button type="button" class="secondary" id="showOverdueBtn">Geciken Görevler</button>
+        </div>
+      </div>
+    </div>
     <div class="card">
       <table>
         <thead>
@@ -785,38 +832,92 @@ async function renderTasks() {
         </thead>
         <tbody id="taskTableBody"></tbody>
       </table>
+      <div class="form-actions" id="taskPagination"></div>
     </div>
   `);
+
+  document.getElementById("taskFilterApply").addEventListener("click", () => {
+    taskFilters.status = document.getElementById("taskFilterStatus").value;
+    taskFilters.responsibleDepartmentId = document.getElementById("taskFilterDept").value;
+    taskFilters.pageNumber = 1;
+    loadTasks();
+  });
+
+  document.getElementById("taskFilterClear").addEventListener("click", () => {
+    taskFilters = { status: "", responsibleDepartmentId: "", pageNumber: 1, pageSize: 10 };
+    document.getElementById("taskFilterStatus").value = "";
+    document.getElementById("taskFilterDept").value = "";
+    loadTasks();
+  });
+
+  document.getElementById("showOverdueBtn").addEventListener("click", loadOverdueTasks);
+
   await loadTasks();
+}
+
+function buildTaskQuery() {
+  const params = new URLSearchParams();
+  if (taskFilters.status) params.set("status", taskFilters.status);
+  if (taskFilters.responsibleDepartmentId) params.set("responsibleDepartmentId", taskFilters.responsibleDepartmentId);
+  params.set("pageNumber", taskFilters.pageNumber);
+  params.set("pageSize", taskFilters.pageSize);
+  return params.toString();
+}
+
+function renderTaskRows(list) {
+  return list.map((t) => `
+    <tr>
+      <td>${esc(t.title)}${t.isMandatory ? ' <span class="badge">zorunlu</span>' : ""}</td>
+      <td>${esc(t.responsibleDepartmentName) || t.responsibleDepartmentId || "-"}</td>
+      <td>${esc(t.responsibleUserName) || t.responsibleUserId || "-"}</td>
+      <td>${fmtDate(t.dueDate)}</td>
+      <td>
+        <select id="taskStatus_${t.id}">
+          ${TASK_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === t.status ? "selected" : ""}>${TASK_STATUS_LABELS[s]}</option>`).join("")}
+        </select>
+      </td>
+      <td>
+        <textarea id="taskNote_${t.id}" rows="2" style="width:150px">${esc(t.note)}</textarea>
+      </td>
+      <td class="row-actions">
+        <button class="small" onclick="saveTaskStatus(${t.id})">Durumu Kaydet</button>
+        <button class="small secondary" onclick="saveTaskNote(${t.id})">Notu Kaydet</button>
+        <button class="small secondary" onclick="toggleTaskHistory(${t.id})">Geçmiş</button>
+        <div id="taskHistory_${t.id}" class="hidden muted"></div>
+      </td>
+    </tr>`).join("");
 }
 
 async function loadTasks() {
   try {
-    const list = await apiRequest("/OnboardingTasks");
-    document.getElementById("taskTableBody").innerHTML = list.map((t) => `
-      <tr>
-        <td>${esc(t.title)}${t.isMandatory ? ' <span class="badge">zorunlu</span>' : ""}</td>
-        <td>${esc(t.responsibleDepartmentName) || t.responsibleDepartmentId || "-"}</td>
-        <td>${esc(t.responsibleUserName) || t.responsibleUserId || "-"}</td>
-        <td>${fmtDate(t.dueDate)}</td>
-        <td>
-          <select id="taskStatus_${t.id}">
-            ${TASK_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === t.status ? "selected" : ""}>${TASK_STATUS_LABELS[s]}</option>`).join("")}
-          </select>
-        </td>
-        <td>
-          <textarea id="taskNote_${t.id}" rows="2" style="width:150px">${esc(t.note)}</textarea>
-        </td>
-        <td class="row-actions">
-          <button class="small" onclick="saveTaskStatus(${t.id})">Durumu Kaydet</button>
-          <button class="small secondary" onclick="saveTaskNote(${t.id})">Notu Kaydet</button>
-          <button class="small secondary" onclick="toggleTaskHistory(${t.id})">Geçmiş</button>
-          <div id="taskHistory_${t.id}" class="hidden muted"></div>
-        </td>
-      </tr>`).join("");
+    const result = await apiRequest(`/OnboardingTask?${buildTaskQuery()}`);
+    document.getElementById("taskTableBody").innerHTML = renderTaskRows(result.items);
+    renderTaskPagination(result);
   } catch (e) { showError(e.message); }
 }
 
+function renderTaskPagination(result) {
+  const box = document.getElementById("taskPagination");
+  if (!box) return;
+  box.innerHTML = `
+    <span class="muted">Sayfa ${result.pageNumber} / ${result.totalPages} (Toplam ${result.totalCount})</span>
+    <button class="small" ${result.pageNumber <= 1 ? "disabled" : ""} onclick="changeTaskPage(-1)">Önceki</button>
+    <button class="small" ${result.pageNumber >= result.totalPages ? "disabled" : ""} onclick="changeTaskPage(1)">Sonraki</button>
+  `;
+}
+
+function changeTaskPage(delta) {
+  taskFilters.pageNumber += delta;
+  loadTasks();
+}
+
+async function loadOverdueTasks() {
+  try {
+    const list = await apiRequest("/OnboardingTask/overdue");
+    document.getElementById("taskTableBody").innerHTML = renderTaskRows(list);
+    document.getElementById("taskPagination").innerHTML = `<span class="muted">Geciken görevler (${list.length})</span>`;
+  } catch (e) { showError(e.message); }
+}
 async function saveTaskStatus(id) {
   const status = document.getElementById(`taskStatus_${id}`).value;
   try {
