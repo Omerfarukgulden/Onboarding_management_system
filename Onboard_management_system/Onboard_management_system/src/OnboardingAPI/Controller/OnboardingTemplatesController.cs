@@ -7,7 +7,7 @@ namespace Onboard_management_system.OnboardingAPI.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Ik,Admin")]
+[Authorize(Roles = "Admin")]
 public class OnboardingTemplatesController : ControllerBase
 {
     private readonly IOnboardingTemplateService _service;

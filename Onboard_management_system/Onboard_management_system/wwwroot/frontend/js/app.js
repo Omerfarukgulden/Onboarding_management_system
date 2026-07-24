@@ -890,7 +890,7 @@ function renderTaskRows(list) {
 
 async function loadTasks() {
   try {
-    const result = await apiRequest(`/OnboardingTask?${buildTaskQuery()}`);
+    const result = await apiRequest(`/OnboardingTasks?${buildTaskQuery()}`);
     document.getElementById("taskTableBody").innerHTML = renderTaskRows(result.items);
     renderTaskPagination(result);
   } catch (e) { showError(e.message); }
@@ -913,7 +913,7 @@ function changeTaskPage(delta) {
 
 async function loadOverdueTasks() {
   try {
-    const list = await apiRequest("/OnboardingTask/overdue");
+    const list = await apiRequest("/OnboardingTasks/overdue");
     document.getElementById("taskTableBody").innerHTML = renderTaskRows(list);
     document.getElementById("taskPagination").innerHTML = `<span class="muted">Geciken görevler (${list.length})</span>`;
   } catch (e) { showError(e.message); }
@@ -947,8 +947,8 @@ async function toggleTaskHistory(id) {
   try {
     const history = await apiRequest(`/OnboardingTasks/${id}/history`);
     box.innerHTML = history.length
-      ? history.map((h) => `<div>${fmtDate(h.changedAt)} - ${esc(h.changedByUsername)}: ${TASK_STATUS_LABELS[h.oldStatus] || h.oldStatus} → ${TASK_STATUS_LABELS[h.newStatus] || h.newStatus}</div>`).join("")
-      : "<div>Kayıt yok.</div>";
+        ? history.map((h) => `<div>${fmtDate(h.changedAt)} - ${esc(h.changedByUsername)}: ${TASK_STATUS_LABELS[h.oldStatus] || h.oldStatus} → ${TASK_STATUS_LABELS[h.newStatus] || h.newStatus}</div>`).join("")
+        : "<div>Kayıt yok.</div>";
     box.classList.remove("hidden");
   } catch (e) { showError(e.message); }
 }

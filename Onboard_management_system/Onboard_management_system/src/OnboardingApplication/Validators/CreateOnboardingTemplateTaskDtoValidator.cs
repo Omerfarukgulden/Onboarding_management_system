@@ -9,13 +9,7 @@ public class CreateOnboardingTemplateTaskDtoValidator : AbstractValidator<Create
     {
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("title giriniz");
-        
-        RuleFor(y => y.Description)
-            .NotEmpty().WithMessage("description giriniz");
-        
-        RuleFor(x => x.ResponsibleDepartmentId)
-            .NotEmpty().WithMessage("responsibleDepartmentId giriniz");
-        
+
         RuleFor(x=>x.DueInDays)
             .GreaterThan(0).WithMessage("dueInDays giriniz");
         

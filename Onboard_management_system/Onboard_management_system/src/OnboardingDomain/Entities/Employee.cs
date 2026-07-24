@@ -6,7 +6,11 @@ public class Employee
     public int EmpId { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string EmpAddress { get; set; } = string.Empty;
+    public string EmpBlood { get; set; } = string.Empty;
+    public string EmpGender { get; set; } = string.Empty;
 
     // çalışma bilgileri 
     public DateTime HireDate { get; set; }

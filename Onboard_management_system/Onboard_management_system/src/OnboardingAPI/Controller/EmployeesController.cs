@@ -7,7 +7,7 @@ namespace Onboard_management_system.OnboardingAPI.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles =  "Ik,Admin")]
+[Authorize(Roles =  "Ik")]
 public class EmployeesController(IEmployeeService employeeService) : ControllerBase
 {
     private readonly IEmployeeService _employeeService = employeeService;

@@ -26,6 +26,7 @@ public class CreateEmployeeDto
     public string EmpSurname { get; set; } = string.Empty;
     public string EmpEmail { get; set; } = string.Empty;
     public string EmpPhone { get; set; } = string.Empty;
+    
     public string EmpAddress { get; set; } = string.Empty;
     public string EmpBlood { get; set; } = string.Empty;
     public string EmpGender { get; set; } = string.Empty;

@@ -17,9 +17,9 @@ public class CreateDepartmentDto
 // departent güncellemek için gereken veriler 
 public class UpdateDepartmentDto : CreateDepartmentDto
 {
-    public UpdateDepartmentDto(bool ısActive)
+    public UpdateDepartmentDto(bool isActive)
     {
-        IsActive = ısActive;
+        IsActive = isActive;
     }
 
     public bool IsActive { get; set; }

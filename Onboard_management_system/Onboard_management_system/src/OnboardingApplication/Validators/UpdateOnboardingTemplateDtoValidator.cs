@@ -7,7 +7,6 @@ public class UpdateOnboardingTemplateDtoValidator : AbstractValidator<UpdateOnbo
 {
     public UpdateOnboardingTemplateDtoValidator()
     {
-        RuleFor(y => y.IsActive)
-            .IsInEnum().WithMessage("şablon durumunu giriniz");
+
     }
 }

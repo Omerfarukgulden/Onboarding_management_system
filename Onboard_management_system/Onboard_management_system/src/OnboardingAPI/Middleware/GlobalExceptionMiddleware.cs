@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 using Onboard_management_system.OnboardingApplication.Common;
+using Onboard_management_system.OnboardingApplication.Services.exceptions;
 
 namespace Onboard_management_system.OnboardingAPI.Middleware;
 
@@ -34,6 +35,7 @@ public class GlobalExceptionMiddleware
 
         var (statusCode, message) = exception switch
         {
+            NotFoundException => (HttpStatusCode.NotFound, exception.Message),
             KeyNotFoundException => (HttpStatusCode.NotFound, exception.Message),
             InvalidOperationException => (HttpStatusCode.BadRequest, exception.Message),
             UnauthorizedAccessException => (HttpStatusCode.Forbidden, exception.Message),
