@@ -10,8 +10,7 @@ public class CreatePositionDtoValidator : AbstractValidator<CreatePositionDto>
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("pozisyon adı giriniz");
 
-        RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("pozisyon açıklaması giriniz");
+       
         
     }
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Onboard_management_system")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1a8b401ed576ab277443e53ef138242ee0a81b6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3fb7c53fe6e752ab30726408e09b0a1b5c79f65")]
 [assembly: System.Reflection.AssemblyProductAttribute("Onboard_management_system")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Onboard_management_system")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

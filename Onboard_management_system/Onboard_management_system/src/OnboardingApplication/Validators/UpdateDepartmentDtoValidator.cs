@@ -7,7 +7,6 @@ public class UpdateDepartmentDtoValidator : AbstractValidator<UpdateDepartmentDt
 {
     public UpdateDepartmentDtoValidator()
     {
-        RuleFor(x => x.IsActive)
-            .IsInEnum().WithMessage("department durumu boş geçilemez");
+       Include(new CreateDepartmentDtoValidator());
     }
 }

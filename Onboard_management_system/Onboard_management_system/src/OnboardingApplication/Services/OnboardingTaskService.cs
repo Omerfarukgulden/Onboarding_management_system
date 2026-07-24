@@ -14,11 +14,12 @@ public class OnboardingTaskService : IOnboardingTaskService
 {
     private readonly OnboardingDbContext _context;
     private readonly IMapper _mapper;
-
-    public OnboardingTaskService(OnboardingDbContext context, IMapper mapper)
+    private readonly ILogger<OnboardingTaskService> _logger;
+    public OnboardingTaskService(OnboardingDbContext context, IMapper mapper , ILogger<OnboardingTaskService> logger)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
     }
 // tüm taskları getiren method 
     public async Task<PagedResult<OnboardingTaskDto>> GetAllAsync(OnboardingTaskFilterDto filter)
@@ -107,6 +108,11 @@ public class OnboardingTaskService : IOnboardingTaskService
         });
 
         await _context.SaveChangesAsync();
+        
+        _logger.LogInformation(  // ← GÜNCELLENDİ
+            "Görev durumu güncellendi. TaskId: {TaskId}, {OldStatus} → {NewStatus}, Kullanıcı: {UserId}",
+            id, oldStatus, dto.NewStatus, currentUserId);
+
 
         await TryCompleteOnboardingProcessAsync(task.OnboardingProcessId);
 

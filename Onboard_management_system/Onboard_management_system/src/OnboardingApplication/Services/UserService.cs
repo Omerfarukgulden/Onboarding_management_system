@@ -1,12 +1,10 @@
-using System.Security.Cryptography;
-using System.Text;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingDomain.Entities;
 using Onboard_management_system.OnboardingInfrastructure.Context;
-using BCrypt.Net;
+
 
 namespace Onboard_management_system.OnboardingApplication.Services;
 

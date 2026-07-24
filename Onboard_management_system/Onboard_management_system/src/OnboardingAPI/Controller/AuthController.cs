@@ -13,12 +13,14 @@ public class AuthController : ControllerBase
 {
     private readonly OnboardingDbContext _context;
     private readonly ITokenService _tokenService;
+    private readonly ILogger<AuthController> _logger;
    
 
-    public AuthController(OnboardingDbContext context, ITokenService tokenService)
+    public AuthController(OnboardingDbContext context, ITokenService tokenService , ILogger<AuthController> logger)
     {
         _context = context;
         _tokenService = tokenService;
+        _logger = logger;
     }
 
     [HttpPost]//("Login")]
@@ -28,10 +30,15 @@ public class AuthController : ControllerBase
 
         if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
         {
+            _logger.LogWarning("Başarısız giriş denemesi. Kullanıcı adı: {Username}", dto.Username); 
             return Unauthorized("kullanıcı adi veya şifre hatalı");
         }
 
         var token = _tokenService.GenerateToken(user, out var expiresAt);
+        
+        _logger.LogInformation("Kullanıcı giriş yaptı. UserId: {UserId}, Username: {Username}, Rol: {Role}",  // ← GÜNCELLENDİ
+            user.Id, user.Username, user.Role);
+        
         return Ok(new LoginResponseDto()
             { Token = token,
                 ExpiresAt = expiresAt,

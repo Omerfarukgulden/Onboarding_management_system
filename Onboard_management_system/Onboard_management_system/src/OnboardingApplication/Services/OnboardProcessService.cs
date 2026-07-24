@@ -12,11 +12,13 @@ public class OnboardingProcessService : IOnboardingProcessService
 {
     private readonly OnboardingDbContext _context;
     private readonly IMapper _mapper;
+    private readonly ILogger<OnboardingProcessService> _logger;
 
-    public OnboardingProcessService(OnboardingDbContext context, IMapper mapper)
+    public OnboardingProcessService(OnboardingDbContext context, IMapper mapper,  ILogger<OnboardingProcessService> logger)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
     }
 
     //işe alışım sürecini getiren method 
@@ -66,6 +68,8 @@ public class OnboardingProcessService : IOnboardingProcessService
 
         _context.OnboardingProcesses.Add(process);
         await _context.SaveChangesAsync();
+        
+        
 
         
         foreach (var templateTask in template.TemplateTasks)
@@ -85,6 +89,10 @@ public class OnboardingProcessService : IOnboardingProcessService
         }
 
         await _context.SaveChangesAsync();
+        
+        _logger.LogInformation(  
+            "Onboarding süreci başlatıldı. ProcessId: {ProcessId}, EmployeeId: {EmployeeId}, Template: {Template}, Görev sayısı: {TaskCount}",
+            process.Id, employee.EmpId, template.Name, template.TemplateTasks.Count);
 
         var saved = await _context.OnboardingProcesses
             .Include(p => p.Employee)

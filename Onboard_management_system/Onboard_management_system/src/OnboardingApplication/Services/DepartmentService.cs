@@ -27,7 +27,7 @@ public class DepartmentService : IDepartmentService
         return _mapper.Map<IEnumerable<DepartmentDto>>(departments);
     }
 //idye göre getiren method id yoksa çökmez hata mesajı fırlatır 
-    public async Task<DepartmentDto> GetByIdAsync(int id)
+    public async Task<DepartmentDto?> GetByIdAsync(int id)
     {
         var department = await _context.Departments
                              .FirstOrDefaultAsync(d => d.Id == id)

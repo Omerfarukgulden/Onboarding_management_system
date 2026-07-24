@@ -19,7 +19,5 @@ public class CreateOnboardingTemplateTaskDtoValidator : AbstractValidator<Create
         RuleFor(x=>x.DueInDays)
             .GreaterThan(0).WithMessage("dueInDays giriniz");
         
-        RuleFor(x=> x.IsMandatory)
-            .IsInEnum().WithMessage("mandatory giriniz");
     }
 }

@@ -126,4 +126,10 @@ app.UseStaticFiles();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<OnboardingDbContext>();
+    await Onboard_management_system.OnboardingInfrastructure.Seed.SeedData.SeedAsync(context);
+}
+
 app.Run();

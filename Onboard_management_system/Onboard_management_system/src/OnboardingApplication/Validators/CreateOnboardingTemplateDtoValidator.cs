@@ -10,7 +10,6 @@ public class CreateOnboardingTemplateDtoValidator : AbstractValidator<CreateOnbo
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("şablon ismi yazmanız bekleniyor");
 
-        RuleFor(y => y.Description)
-            .NotEmpty().WithMessage("şablon açıklaması yazmanız beklenior");
+        
     }
 }

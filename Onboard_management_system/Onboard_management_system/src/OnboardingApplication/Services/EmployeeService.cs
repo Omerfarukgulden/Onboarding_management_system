@@ -5,7 +5,7 @@ using Onboard_management_system.OnboardingApplication.Dtos;
 using Onboard_management_system.OnboardingApplication.Interfaces;
 using Onboard_management_system.OnboardingDomain.Entities;
 using Onboard_management_system.OnboardingInfrastructure.Context;
-using Onboard_management_system.OnboardingApplication.Services.exceptions;
+
 
 namespace Onboard_management_system.OnboardingApplication.Services;
 
@@ -13,11 +13,13 @@ public class EmployeeService : IEmployeeService
 {
     private readonly OnboardingDbContext _context;
     private readonly IMapper _mapper;
+    private readonly ILogger<EmployeeService> _logger;
 
-    public EmployeeService(OnboardingDbContext context, IMapper mapper)
+    public EmployeeService(OnboardingDbContext context, IMapper mapper ,  ILogger<EmployeeService> logger)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
     }
 // tüm çalışanları gösteren method 
     public async Task<PagedResult<EmployeeDto>> GetAllAsync(EmployeeFilterDto filter)
@@ -90,6 +92,9 @@ public class EmployeeService : IEmployeeService
 
         _context.Employees.Add(employee);
         await _context.SaveChangesAsync();
+        
+        _logger.LogInformation("Yeni çalışan oluşturuldu. EmpId: {EmpId}, Ad: {Name}, Departman: {Department}",
+            employee.EmpId, $"{employee.FirstName} {employee.LastName}", department.Name);
 
         return await GetByIdAsync(employee.EmpId)
                ?? throw new InvalidOperationException("Çalışan oluşturuldu ama tekrar okunamadı.");
@@ -112,6 +117,9 @@ public class EmployeeService : IEmployeeService
 
         employee.IsActive = false;
         await _context.SaveChangesAsync();
+        
+        _logger.LogInformation("Çalışan pasife alındı. EmpId: {EmpId}", empId);
+        
         return true;
     }
 }
